@@ -32,7 +32,7 @@ class PostController extends Controller
             'message' => 'List data post',
             'list' => $posts
         ], 200);
-        
+
         // PostsList.vue
     }
 
@@ -147,7 +147,7 @@ class PostController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Post deleted'
-            ], 200);
+            ], 404);
         }
         return response()->json([
             'success' => false,

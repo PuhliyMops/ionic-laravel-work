@@ -3,16 +3,16 @@
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import Connect from '../confconnect';
-import 
-{ 
-   IonContent, 
-   IonHeader, 
-   IonPage, 
-   IonTitle, 
-   IonToolbar, 
-   IonCol, 
+import
+{
+   IonContent,
+   IonHeader,
+   IonPage,
+   IonTitle,
+   IonToolbar,
+   IonCol,
    IonGrid,
-   IonRow, 
+   IonRow,
    IonButton,
 } from '@ionic/vue';
 
@@ -30,7 +30,7 @@ const created = () => {
       .then((response) => {
         if (response.data.error != null) {
           datavw.value.error = response.data.error;
-        } else { 
+        } else {
           datavw.value.success = response.data.success;
           datavw.value.message = response.data.message;
           datavw.value.list = response.data.list;
@@ -55,7 +55,7 @@ const deleteId = (id) => {
 <style scoped>
 #container {
   text-align: center;
-  
+
   position: absolute;
   left: 0;
   right: 0;
@@ -71,9 +71,9 @@ const deleteId = (id) => {
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
+
   color: #8c8c8c;
-  
+
   margin: 0;
 }
 
@@ -101,11 +101,13 @@ const deleteId = (id) => {
       <ion-grid>
           <ion-row>
               <ion-col>Title</ion-col>
+              <ion-col>Content</ion-col>
               <ion-col>Edit</ion-col>
               <ion-col>Delete</ion-col>
           </ion-row>
           <ion-row v-for="list_one in datavw.list">
               <ion-col>{{list_one.title}}</ion-col>
+              <ion-col>{{list_one.content}}</ion-col>
               <ion-col>
               <ion-button @click="() => router.push({ name: 'Post_prev', params: { id: list_one.id } })">Edit</ion-button>
               </ion-col>

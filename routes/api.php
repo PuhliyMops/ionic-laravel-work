@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ForumController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
@@ -22,6 +23,10 @@ Route::get('posts/{post}', [PostController::class, 'show']);
 Route::post('posts', [PostController::class, 'store']);
 Route::put('posts/{post}', [PostController::class, 'update']);
 Route::delete('posts/{post}', [PostController::class, 'destroy']);
+Route::get('forum', [ForumController::class, 'index']);
+Route::post('forum', [ForumController::class, 'store']);
+Route::put("forum/{post}", [ForumController::class, "update"]);
+Route::delete('forum/{post}', [ForumController::class, 'destroy']);
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

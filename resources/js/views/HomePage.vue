@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import 
-{ 
-   IonContent, 
-   IonHeader, 
-   IonPage, 
-   IonTitle, 
+import
+{
+   IonContent,
+   IonHeader,
+   IonPage,
+   IonTitle,
    IonToolbar,
    IonButton,
 } from '@ionic/vue';
@@ -17,7 +17,7 @@ const router = useRouter();
 <style scoped>
 #container {
   text-align: center;
-  
+
   position: absolute;
   left: 0;
   right: 0;
@@ -33,9 +33,9 @@ const router = useRouter();
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
+
   color: #8c8c8c;
-  
+
   margin: 0;
 }
 
@@ -49,7 +49,8 @@ const router = useRouter();
       <ion-toolbar>
         <ion-title>Blank</ion-title>
       </ion-toolbar>
-      <ion-button router-link="/posts">Posts</ion-button>
+        <ion-button router-link="/posts">Posts</ion-button>
+        <ion-button router-link="/forum">Forum</ion-button>
     </ion-header>
 
     <ion-content :fullscreen="true">
