@@ -60,7 +60,7 @@ class PostController extends Controller
         ]);
         $posts = Post::create([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->content,
         ]);
 
         return response()->json([

@@ -3,7 +3,7 @@
 import {useRouter} from 'vue-router';
 import {ref} from 'vue';
 import Connect from '../confconnect';
-import {trash, pencil, backspace, checkmarkDone, eyeOff} from "ionicons/icons";
+import {trash, pencil, backspace, checkmarkDone, eyeOff, logOut, logIn} from "ionicons/icons";
 import {
     IonContent,
     IonHeader,
@@ -18,12 +18,15 @@ import {
     alertController
 } from '@ionic/vue';
 
+console.log(document.cookie)
+
 const router = useRouter();
 const isEdit = ref(0)
 const cols = 100
 const datavw = ref({
     success: '',
     message: '',
+    user: null,
     list: [],
     formEdit:
         {
@@ -37,17 +40,32 @@ const datavw = ref({
         },
 });
 
-
 const date = (string) =>{return new Date(string)}
 const setEdit = (id) =>{
     isEdit.value = id
 }
 
-
-function scrollDown(){
-    const objDiv = document.getElementsByClassName('forum')[0];
-    objDiv.scrollTop = objDiv.scrollHeight;
+function styleAuth(){
+    if (datavw.value.user==null){
+        return '100%'
+    }
+    else {
+        return '50%'
+    }
 }
+
+function logout(){
+    Connect.post('/logout', null)
+        .then((response) => {
+            localStorage.removeItem('user')
+            window.location.replace("/forum")
+        });
+}
+
+function login(){
+    window.location.replace("/login")
+}
+
 
 function ShowSelectionInsideTextarea(id)
 {
@@ -61,7 +79,21 @@ function addTag(id, tag){
     const pos = ShowSelectionInsideTextarea(id)
     const text = document.getElementById(id).getElementsByClassName("native-textarea")[0]
     text.value = text.value.slice(0, pos[0])+`[${tag}]${text.value.slice(pos[0], pos[1])}[/${tag}]`+ text.value.slice(pos[1])
-    datavw.value.formEdit.post = text.value
+    if (id=="edit"){
+        datavw.value.formEdit.post = text.value
+    }
+    else {
+        datavw.value.formCreate.post = text.value
+    }
+
+}
+
+function isCurrentUser(post):Boolean{
+    if (datavw.value.user!=null){
+        return datavw.value.user.name == post.user;
+
+    }
+    return false
 }
 
 
@@ -115,11 +147,9 @@ const submit = () => {
                 document.querySelector(".post-form textarea").value = "";
                 response.post = '';
                 response.user = '';
-                datavw.value.list.push(
-                    response.data.data
-                )
-                const id = datavw.value.list.length-1
-                window.location.replace(`forum#${id-1}`)
+                created()
+                created(true)
+
             });
     } catch (error) {
         datavw.value.error = error;
@@ -132,36 +162,48 @@ const update = (id) => {
                 response.post = '';
                 response.user = '';
                 setEdit(0);
-                datavw.value.list[id].post = response.data.data.post;
-                datavw.value.list[id].updated_at =  response.data.data.updated_at;
+                created()
             });
     } catch (error) {
         datavw.value.error = error;
     }
 };
-const created = () => {
+const created = (down=false) => {
     try {
         Connect.get('/forum')
             .then((response) => {
                 if (response.data.error != null) {
                     datavw.value.error = response.data.error;
                 } else {
+                    //let $user = document.querySelector("meta[name='user']").getAttribute('content').replaceAll("&quot;", '"');
+                    let $user = localStorage.getItem("user");
+                    if ($user!=null){
+                        datavw.value.user = JSON.parse($user);
+                        datavw.value.formCreate.user = datavw.value.user.name;
+                    }
                     datavw.value.success = response.data.success;
                     datavw.value.message = response.data.message;
                     datavw.value.list = response.data.list;
+                    if (down){
+                        const id = datavw.value.list.length
+                        window.location.replace(`forum#${datavw.value.list[id-2].id
+                        }`)
+                    }
+
                 }
             });
     } catch (error) {
         console.log(error);
     }
 };
+
 const deleteId = (id) => {
     try {
         Connect.delete(`/forum/${datavw.value.list[id].id}`).then(
             (response) => {
                 response.post = '';
                 response.user = '';
-                datavw.value.list.splice(id, 1)
+                created()
             })
     } catch (error) {
         console.log(error.toString());
@@ -169,7 +211,27 @@ const deleteId = (id) => {
     //router.push({ name: 'Post_list' });
 };
 
-created();
+created()
+created(true)
+
+let intervalId = setInterval(function() {
+    if (document.activeElement.tagName.toLowerCase() == 'textarea'){
+        created()
+    }
+    else{
+        created(true)
+    }
+}, 10000);
+
+function isAuth(){
+    if (datavw.value.user!=null){
+        return  ' is_auth'
+    }
+    else {
+        return  ''
+    }
+}
+
 
 </script>
 
@@ -226,8 +288,12 @@ created();
 }
 
 .forum{
-    max-height: 80%;
+    max-height: 100%;
     overflow-y: auto;
+}
+
+.forum.is_auth{
+    max-height: 75%;
 }
 
 
@@ -272,7 +338,7 @@ form ion-list{
 }
 
 .add-post{
-    width: 60%;
+    width: 50%;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -303,6 +369,7 @@ form ion-list{
     padding: 0;
 }
 
+
 .submit{
     float: right;
 }
@@ -312,86 +379,114 @@ form ion-list{
     text-decoration: none;
 }
 
+ion-header ion-toolbar ion-button{
+    float: right;
+}
 
 </style>
 
 <template>
-    <ion-page>
-        <ion-header :translucent="true">
-            <ion-toolbar>
-                <ion-title>Forum</ion-title>
-            </ion-toolbar>
-        </ion-header>
-
-        <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
+    <ion-refresher>
+        <ion-page>
+            <ion-header :translucent="true">
                 <ion-toolbar>
-                    <ion-title size="large">Forum</ion-title>
+                    <ion-title>Forum</ion-title>
+                    <ion-button v-if="datavw.user!=null" @click="logout">
+                        <ion-icon :icon="logOut" slot="icon-only"></ion-icon>
+                    </ion-button>
+                    <ion-button v-else @click="login">
+                        <ion-icon :icon="logIn" slot="icon-only"></ion-icon>
+                    </ion-button>
                 </ion-toolbar>
             </ion-header>
-            <div class="forum">
-                <div class="message" v-for="(post, index) in datavw.list" :id="index">
-                    <div class="post-data">
-                        <span class="user-name">{{post.user}}</span>
 
-                        <span v-if="post.created_at==post.updated_at" class="created-time">{{date(post.created_at).toLocaleDateString("ru-Ru")}} {{date(post.created_at).toLocaleTimeString("ru-Ru")}}</span>
-                        <span v-else class="created-time">ред. {{date(post.updated_at).toLocaleDateString("ru-Ru")}} {{date(post.updated_at).toLocaleTimeString("ru-Ru")}}</span>
+            <ion-content :fullscreen="true">
+                <ion-header collapse="condense">
+                    <ion-toolbar>
+                        <ion-title size="large">Forum</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <div :class="'forum'+isAuth()">
+                    <div class="message" v-for="(post, index) in datavw.list" :id="post.id">
+                        <div class="post-data">
+                            <span class="user-name">{{post.user}}</span>
 
+                            <span v-if="post.created_at==post.updated_at" class="created-time">{{date(post.created_at).toLocaleDateString("ru-Ru")}} {{date(post.created_at).toLocaleTimeString("ru-Ru")}}</span>
+                            <span v-else class="created-time">ред. {{date(post.updated_at).toLocaleDateString("ru-Ru")}} {{date(post.updated_at).toLocaleTimeString("ru-Ru")}}</span>
+
+                        </div>
+                        <template v-if="isEdit == post.id">
+                            <form @submit.prevent="update(index)">
+                                <ion-textarea id="edit" class="edit-text" :value="post.post"
+                                              required
+                                              rows=5
+                                              @input="datavw.formEdit.post=$event.target.value">
+                                    <ion-toolbar class="edit-text-toolbar" slot="start">
+                                        <ion-button class="bold-text" @click="addTag('edit','b')">
+                                            <b>B</b>
+                                        </ion-button>
+                                        <ion-button class="italic-text" @click="addTag('edit','i')">
+                                            <i>I</i>
+                                        </ion-button>
+                                        <ion-button class="spoiler-text" @click="addTag('edit','spoiler')">
+                                            <ion-icon :icon="eyeOff" slot="icon-only"></ion-icon>
+                                        </ion-button>
+                                    </ion-toolbar>
+                                </ion-textarea>
+                                <ion-button class="done-post" type="submit" color="secondary">
+                                    <ion-icon :icon="checkmarkDone" slot="icon-only"></ion-icon>
+                                </ion-button>
+                                <ion-button class="back-post"  color="warning" @click="setEdit(0); datavw.formEdit.post=''">
+                                    <ion-icon :icon="backspace" slot="icon-only"></ion-icon>
+                                </ion-button>
+                            </form>
+                        </template>
+                        <template v-else>
+                            <div v-html="editText(post.post)" class="textarea-disabled"></div>
+                            <ion-button v-if="isCurrentUser(post)" class="delete-post" color="danger" @click="createAlert(index)">
+                                <ion-icon :icon="trash" slot="icon-only"></ion-icon>
+                            </ion-button>
+                            <ion-button v-if="isCurrentUser(post)" class="edit-post" color="secondary" @click="setEdit(post.id); datavw.formEdit.post=post.post">
+                                <ion-icon :icon="pencil" slot="icon-only"></ion-icon>
+                            </ion-button>
+                        </template>
                     </div>
-                    <template v-if="isEdit == post.id">
-                        <form @submit.prevent="update(index)">
-                            <ion-textarea id="edit" class="edit-text" :value="post.post"
-                                          required
-                                          rows=5
-                                          @input="datavw.formEdit.post=$event.target.value">
-                                <ion-toolbar class="edit-text-toolbar" slot="start">
-                                    <ion-button class="bold-text" @click="addTag('edit','b')">
-                                        <b>B</b>
-                                    </ion-button>
-                                    <ion-button class="italic-text" @click="addTag('edit','i')">
-                                        <i>I</i>
-                                    </ion-button>
-                                    <ion-button class="spoiler-text" @click="addTag('edit','spoiler')">
-                                        <ion-icon :icon="eyeOff" slot="icon-only"></ion-icon>
-                                    </ion-button>
-                                </ion-toolbar>
-                            </ion-textarea>
-                            <ion-button class="done-post" type="submit" color="secondary">
-                                <ion-icon :icon="checkmarkDone" slot="icon-only"></ion-icon>
-                            </ion-button>
-                            <ion-button class="back-post"  color="warning" @click="setEdit(0); datavw.formEdit.post=''">
-                                <ion-icon :icon="backspace" slot="icon-only"></ion-icon>
-                            </ion-button>
-                        </form>
-                    </template>
-                    <template v-else>
-                        <div v-html="editText(post.post)" class="textarea-disabled"></div>
-                        <ion-button class="delete-post" color="danger" @click="createAlert(index)">
-                            <ion-icon :icon="trash" slot="icon-only"></ion-icon>
-                        </ion-button>
-                        <ion-button class="edit-post" color="secondary" @click="setEdit(post.id); datavw.formEdit.post=post.post">
-                            <ion-icon :icon="pencil" slot="icon-only"></ion-icon>
-                        </ion-button>
-                    </template>
                 </div>
-            </div>
 
-            <form @submit.prevent="submit" id="addPost">
-                <ion-list class="add-post">
-                    <ion-item>
-                        <ion-input class="username-form"  required label="" placeholder="Пользователь" v-model="datavw.formCreate.user"></ion-input>
-                    </ion-item>
+                <template v-if="datavw.user==null">
 
-                    <ion-item>
-                        <ion-textarea id="post-text" class="post-form" required rows="5" @input="datavw.formCreate.post=$event.target.value"></ion-textarea>
-                    </ion-item>
+                </template>
+                <template v-else>
+                    <form @submit.prevent="submit" id="addPost" >
+                        <ion-list class="add-post">
+                            <ion-item>
+                                <ion-text>{{datavw.user.name}}</ion-text>
+                            </ion-item>
 
-                    <ion-button class="submit" type="submit">Send</ion-button>
+                            <ion-item>
+                                <ion-textarea id="post-text" class="post-form" required rows="5" @input="datavw.formCreate.post=$event.target.value">
+                                    <ion-toolbar class="edit-text-toolbar" slot="start">
+                                        <ion-button class="bold-text" @click="addTag('post-text','b')">
+                                            <b>B</b>
+                                        </ion-button>
+                                        <ion-button class="italic-text" @click="addTag('post-text','i')">
+                                            <i>I</i>
+                                        </ion-button>
+                                        <ion-button class="spoiler-text" @click="addTag('post-text','spoiler')">
+                                            <ion-icon :icon="eyeOff" slot="icon-only"></ion-icon>
+                                        </ion-button>
+                                    </ion-toolbar>
+                                </ion-textarea>
+                            </ion-item>
 
-                </ion-list>
-            </form>
+                            <ion-button class="submit" type="submit">Send</ion-button>
 
-        </ion-content>
-    </ion-page>
+                        </ion-list>
+                    </form>
+                </template>
+
+            </ion-content>
+        </ion-page>
+    </ion-refresher>
 </template>
 

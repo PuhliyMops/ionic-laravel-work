@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Forum;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 
 /*
 * index
@@ -28,32 +31,27 @@ class ForumController extends Controller
     public function index()
     {
         $posts = Forum::all();
+        $user = Auth::user();
         return response()->json([
+            'user' => $user,
             'success' => true,
             'message' => 'List data post',
             'list' => $posts
         ], 200);
-
         // PostsList.vue
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'user' => 'required|string|max:255',
             'post' => 'required'
         ]);
-        $userIdCheck = Forum::where("user", $request -> user) -> first();
-        if ($userIdCheck === null){
-            $userId = Forum::all() -> sortBy("userId") -> last() -> userId+1;
-        }
-        else{
-            $userId = $userIdCheck -> userId;
-        }
+        $user = Auth::user();
         $posts = Forum::create([
             'post' => $request->post,
-            'user' => $request->user,
-            'userId' => $userId
+            'user' => $user->name,
+            'userId' => $user->id,
         ]);
 
         return response()->json([

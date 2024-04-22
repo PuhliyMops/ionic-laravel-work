@@ -1,1 +1,0 @@
-System.register(["./index-legacy-BbxJoLCD.js"],(function(e,t){"use strict";var n;return{setters:[function(e){n=e.H}],execute:function(){e("C",n.create({baseURL:"http://127.0.0.1:8000/api/",headers:{"Content-type":"application/json"}}))}}}));

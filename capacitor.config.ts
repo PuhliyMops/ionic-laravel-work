@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'myApp',
   webDir: 'public',
   server: {
-      "androidSheme": "http",
+      url: 'http://10.42.0.1:8001',
   }
 };
 

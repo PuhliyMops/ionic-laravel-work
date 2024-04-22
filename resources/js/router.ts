@@ -31,9 +31,19 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('./views/PostsAdd.vue')
     },
     {
-    path: '/posts/:id',
-    name: 'Post_prev',
-    component: () => import('./views/PostPrev.vue'),
+    path: '/register',
+    name: 'Registration',
+    component: () => import('./views/Registration.vue'),
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import('./views/Login.vue'),
+    },
+    {
+        path: '/posts/:id',
+        name: 'Post_prev',
+        component: () => import('./views/PostPrev.vue'),
     },
 ]
 

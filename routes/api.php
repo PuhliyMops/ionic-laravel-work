@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ForumController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 /*
@@ -17,16 +17,23 @@ use App\Http\Controllers\Api\PostController;
 
 //Route::apiResource('posts',PostController::class);
 //Route_Posts
-Route::get('posts', [PostController::class, 'index']);
-Route::get('posts_add', [PostController::class, 'create']);
-Route::get('posts/{post}', [PostController::class, 'show']);
-Route::post('posts', [PostController::class, 'store']);
-Route::put('posts/{post}', [PostController::class, 'update']);
-Route::delete('posts/{post}', [PostController::class, 'destroy']);
-Route::get('forum', [ForumController::class, 'index']);
-Route::post('forum', [ForumController::class, 'store']);
-Route::put("forum/{post}", [ForumController::class, "update"]);
-Route::delete('forum/{post}', [ForumController::class, 'destroy']);
+Route::group(['middleware' => ['web']], function () {
+
+    Route::get('posts', [PostController::class, 'index']);
+    Route::get('posts_add', [PostController::class, 'create']);
+    Route::get('posts/{post}', [PostController::class, 'show']);
+    Route::post('posts', [PostController::class, 'store']);
+    Route::put('posts/{post}', [PostController::class, 'update']);
+    Route::delete('posts/{post}', [PostController::class, 'destroy']);
+    Route::get('forum', [ForumController::class, 'index']);
+    Route::post('forum', [ForumController::class, 'store']);
+    Route::put("forum/{post}", [ForumController::class, "update"]);
+    Route::delete('forum/{post}', [ForumController::class, 'destroy']);
+    Route::post('register', [AuthController::class, 'registration']);
+    Route::post('login', [AuthController::class, 'authenticate']);
+    Route::post('logout', [AuthController::class, 'log_out']);
+
+});
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
