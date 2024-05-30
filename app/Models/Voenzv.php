@@ -15,7 +15,7 @@ class Voenzv extends Model
         "name"
     ];
 
-    public function reestr()
+    public function reestrs()
     {
         return $this->hasMany(GvmuReestr::class);
     }

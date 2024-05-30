@@ -51,7 +51,7 @@ class User extends Authenticatable
     ];
 
 
-    public function reestr()
+    public function reestrs()
     {
         return $this->hasMany(GvmuReestr::class);
     }
