@@ -50,7 +50,7 @@ const router = useRouter();
         <ion-title>Blank</ion-title>
       </ion-toolbar>
         <ion-button router-link="/posts">Posts</ion-button>
-        <ion-button router-link="/forum">Forum</ion-button>
+        <ion-button router-link="/reestrs">Reestrs</ion-button>
     </ion-header>
 
     <ion-content :fullscreen="true">

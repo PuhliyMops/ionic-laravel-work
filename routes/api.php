@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\AuthController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\GvmuReestrController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 /*
@@ -17,8 +19,13 @@ use App\Http\Controllers\Api\PostController;
 
 //Route::apiResource('posts',PostController::class);
 //Route_Posts
-Route::group(['middleware' => ['web']], function () {
 
+
+
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('reestrs', [GvmuReestrController::class, 'index']);
+    Route::get('reestrs/department/{department}', [GvmuReestrController::class, 'index_department']);
     Route::get('posts', [PostController::class, 'index']);
     Route::get('posts_add', [PostController::class, 'create']);
     Route::get('posts/{post}', [PostController::class, 'show']);
