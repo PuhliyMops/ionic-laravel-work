@@ -26,7 +26,7 @@ const datavw = ref({
 
   form:
     {
-        name: '',
+        username: '',
         password: '',
     },
 });
@@ -38,7 +38,7 @@ const submit = () => {
     Connect.post('/login', datavw.value.form)
       .then((response) => {
           localStorage.setItem("user", JSON.stringify(response.data))
-          window.location.replace('/forum')
+          window.location.replace('/reestrs')
       });
   } catch (error) {
       console.log(77777777777)
@@ -93,13 +93,13 @@ const submit = () => {
         </ion-toolbar>
       </ion-header>
 
-      <ion-button  @click="() => router.push({ name: 'Forum' })">Back</ion-button>
+      <ion-button  @click="() => router.push({ name: 'Reestrs' })">Back</ion-button>
 
  <form @submit.prevent="submit">
   <ion-list>
 
     <ion-item>
-      <ion-input required label="Email" v-model="datavw.form.name"></ion-input>
+      <ion-input required label="Email" v-model="datavw.form.username"></ion-input>
     </ion-item>
 
       <ion-item>

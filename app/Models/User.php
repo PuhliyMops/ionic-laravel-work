@@ -19,7 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'firstname',
+        'lastname',
+        'middlename',
         'email',
+        'role',
         'password',
     ];
 
@@ -28,10 +32,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'email_verified_at',
-        'remember_token',
+    protected $visible = [
+        'id',
+        'username',
     ];
 
 
@@ -46,8 +49,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function posts()
+
+    public function reestrs()
     {
-        return $this->hasMany(Forum::class, "userId");
+        return $this->hasMany(GvmuReestr::class);
     }
+
+
 }

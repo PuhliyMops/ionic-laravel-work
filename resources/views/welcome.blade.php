@@ -1,5 +1,6 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -16,6 +17,20 @@
     <meta name="msapplication-tap-highlight" content="no" />
 
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+      @guest
+          <script>
+              if (window.location.pathname != '/login'){
+                window.location.replace("/login");
+              }
+          </script>
+      @endguest
+      @auth
+          <script>
+              if (window.location.pathname == '/login'){
+                window.location.replace("/reestrs");
+              }
+          </script>
+      @endauth
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />

@@ -14,16 +14,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: () => import('./views/HomePage.vue')
     },
+    {
+        path: '/reestrs',
+        name: 'Reestrs',
+        component: () => import('./views/ReestrsPage.vue')
+    },
+    {
+        path: '/reestrs/department/:department',
+        name: 'Reestrs_department',
+        component: () => import('./views/ReestrsPage.vue')
+    },
   // Posts
     {
         path: '/posts',
         name: 'Post_list',
         component: () => import('./views/PostsList.vue')
-    },
-    {
-        path: '/forum',
-        name: 'Forum',
-        component: () => import('./views/Forum.vue')
     },
     {
     path: '/posts_add',
