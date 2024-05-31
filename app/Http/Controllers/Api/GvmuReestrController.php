@@ -6,11 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\GvmuReestr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GvmuReestrController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->role == "user"){
+            return response()->json([
+                'success' => true,
+                'message' => 'redirect',
+                'href' => 'reestrs/department/1'
+            ], 200);
+        }
         $reestrs = GvmuReestr::all();
         foreach ($reestrs as $reestr){
             $reestr -> user;
@@ -18,6 +26,7 @@ class GvmuReestrController extends Controller
             $reestr -> vmo;
             $reestr -> voenzv;
             $reestr -> groupinvalid;
+            $reestr -> user;
         }
 
         return response()->json([
@@ -29,6 +38,7 @@ class GvmuReestrController extends Controller
 
     public function index_department(Department $department)
     {
+
         $reestrs = $department->reestrs()->get();
         foreach ($reestrs as $reestr){
             $reestr -> user;

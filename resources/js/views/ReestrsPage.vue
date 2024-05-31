@@ -23,13 +23,13 @@ const datavw = ref({
   message: '',
   list: [],
 });
-console.log(window.location)
 const created = () => {
   try {
-
     Connect.get(window.location.pathname+window.location.search)
       .then((response) => {
-
+        if (response.data.message == "redirect"){
+            window.location.replace(response.data.href)
+        }
         if (response.data.error != null) {
           datavw.value.error = response.data.error;
         } else {

@@ -32,10 +32,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'email_verified_at',
-        'remember_token',
+    protected $visible = [
+        'id',
+        'username',
     ];
 
 
@@ -55,5 +54,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(GvmuReestr::class);
     }
+
 
 }
