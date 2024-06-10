@@ -1,5 +1,6 @@
 
 <script setup lang="ts">
+import Menu from './Menu.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import Connect from '../confconnect';
@@ -82,37 +83,45 @@ const deleteId = (id) => {
 }
 </style>
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-button  @click="() => router.push({ name: 'Post_add' })">Post add</ion-button>
-
+<Menu />
+<ion-page>
+      <ion-button  @click="() => router.push({ name: 'Post_add' })">Добавить</ion-button>
+        <ion-content>
       <ion-grid>
           <ion-row>
-              <ion-col>Title</ion-col>
-              <ion-col>Content</ion-col>
-              <ion-col>Edit</ion-col>
-              <ion-col>Delete</ion-col>
+            <ion-col>Фамилия</ion-col>
+              <ion-col>Имя</ion-col>
+              <ion-col>Отчество</ion-col>
+              <ion-col>СНИЛС</ion-col>
+              <ion-col>Личный номер</ion-col>
+              <ion-col>Дата рождения</ion-col>
+              <ion-col>Дата ранения</ion-col>
+              <ion-col>Дата поступления ВМО</ion-col>
+              <ion-col>Диагноз</ion-col>
+              <ion-col>Заключение ВВК, номер протокола</ion-col>
+              <ion-col>Дата протокола заключения ВВК</ion-col>
+              <ion-col>Группа инвалидности</ion-col>
+              <ion-col>Дата проведения МСЭ</ion-col>
+              <ion-col>Группа инвалидности МСЭ</ion-col>
+              <ion-col>ВМО Военн мед организ</ion-col>
+              <ion-col>Протез</ion-col>
+              <ion-col>Вед протез</ion-col>
+              <ion-col>Дата протезирования</ion-col>
+              <ion-col>Дата выписки ВМО</ion-col>
+              <ion-col>Источник средств ТСР</ion-col>
+              <ion-col>Категория</ion-col>
+              <ion-col>Решение продолжения службы</ion-col>
+              <ion-col>Контактный телефон</ion-col>
+              <ion-col>EMail</ion-col>
           </ion-row>
           <ion-row v-for="list_one in datavw.list">
               <ion-col>{{list_one.title}}</ion-col>
               <ion-col>{{list_one.content}}</ion-col>
               <ion-col>
-              <ion-button @click="() => router.push({ name: 'Post_prev', params: { id: list_one.id } })">Edit</ion-button>
+              <ion-button @click="() => router.push({ name: 'Post_prev', params: { id: list_one.id } })">Редактировать</ion-button>
               </ion-col>
               <ion-col>
-                <ion-button @click="deleteId(list_one.id)">Delete</ion-button>
+                <ion-button @click="deleteId(list_one.id)">Удалить</ion-button>
               </ion-col>
           </ion-row>
       </ion-grid>

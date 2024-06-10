@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import Menu from './Menu.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ref } from 'vue';
 import Connect from '../confconnect';
-import 
-{ 
-   IonContent, 
-   IonHeader, 
-   IonPage, 
-   IonTitle, 
-   IonToolbar, 
-   IonCol, 
+import
+{
+   IonContent,
+   IonHeader,
+   IonPage,
+   IonTitle,
+   IonToolbar,
+   IonCol,
    IonGrid,
    IonRow,
    IonInput,
@@ -71,7 +72,7 @@ const submit = () => {
 <style scoped>
 #container {
   text-align: center;
-  
+
   position: absolute;
   left: 0;
   right: 0;
@@ -87,9 +88,9 @@ const submit = () => {
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
+
   color: #8c8c8c;
-  
+
   margin: 0;
 }
 
@@ -98,22 +99,8 @@ const submit = () => {
 }
 </style>
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-button  @click="() => router.push({ name: 'Post_list' })">Back</ion-button>
-
+<Menu />
+<ion-page>
  <form @submit.prevent="submit">
   <ion-list>
     <ion-item>
@@ -128,7 +115,7 @@ const submit = () => {
 
   </ion-list>
   </form>
-    </ion-content>
+
   </ion-page>
 </template>
 

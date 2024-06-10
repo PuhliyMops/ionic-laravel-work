@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import Menu from './Menu.vue';
 import { useRouter } from 'vue-router';
+import { defineComponent } from 'vue';
 import
 {
    IonContent,
@@ -8,7 +10,15 @@ import
    IonTitle,
    IonToolbar,
    IonButton,
+   IonIcon,
+   IonInput,
+   IonButtons,
+   IonMenu,
+   IonMenuButton,
+   IonMenuToggle,
+
 } from '@ionic/vue';
+
 
 const router = useRouter();
 
@@ -17,7 +27,7 @@ const router = useRouter();
 <style scoped>
 #container {
   text-align: center;
-
+  width: 15%;
   position: absolute;
   left: 0;
   right: 0;
@@ -37,34 +47,19 @@ const router = useRouter();
   color: #8c8c8c;
 
   margin: 0;
+
 }
 
 #container a {
   text-decoration: none;
 }
+
+
 </style>
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-        <ion-button router-link="/posts">Posts</ion-button>
-        <ion-button router-link="/reestrs">Reestrs</ion-button>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
-    </ion-content>
-  </ion-page>
+<ion-page>
+    <Menu />
+</ion-page>
 </template>
+
 

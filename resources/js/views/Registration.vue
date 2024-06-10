@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Menu from './Menu.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import Connect from '../confconnect';
@@ -74,45 +75,32 @@ const submit = () => {
 }
 </style>
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-button  @click="() => router.push({ name: 'Post_list' })">Back</ion-button>
-
+   <Menu />
+   <ion-page>
+    <ion-content>
  <form @submit.prevent="submit">
   <ion-list>
     <ion-item>
-      <ion-input required label="Логин" v-model="datavw.form.username"></ion-input>
+      <ion-input required label="Введите логин" v-model="datavw.form.username"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-input type="email" required label="Email" v-model="datavw.form.email"></ion-input>
+      <ion-input type="email" required label="Введите Email" v-model="datavw.form.email"></ion-input>
     </ion-item>
 
       <ion-item>
-          <ion-input type="password" required label="Пароль" v-model="datavw.form.password"></ion-input>
+          <ion-input type="password" required label="Введите пароль" v-model="datavw.form.password"></ion-input>
       </ion-item>
 
       <ion-item>
           <ion-input type="password" required label="Повторите пароль" v-model="datavw.form.password_confirmation"></ion-input>
       </ion-item>
 
-    <ion-button type="submit">Send</ion-button>
+    <ion-button shape="round" type="submit">Зарегистрироваться</ion-button>
 
   </ion-list>
   </form>
     </ion-content>
-  </ion-page>
+    </ion-page>
 </template>
 

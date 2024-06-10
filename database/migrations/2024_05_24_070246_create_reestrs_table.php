@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('firstname', 50);
             $table->string('lastname', 50);
             $table->string('middlename', 50);
-            $table->string('SNILS', 11);
-            $table->string('private number', 20);
+            $table->string('snils', 11);
+            $table->string('private_number', 20);
             $table->date('birthdate');
             $table->date('damage_date');
             $table->date('entrance_date');

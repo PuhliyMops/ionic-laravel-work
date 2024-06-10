@@ -35,11 +35,18 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Post_add',
     component: () => import('./views/PostsAdd.vue')
     },
+    // Login and Registration
     {
     path: '/register',
     name: 'Registration',
     component: () => import('./views/Registration.vue'),
     },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: () => import('./views/AdminPage.vue')
+    },
+
     {
         path: '/login',
         name: 'Login',

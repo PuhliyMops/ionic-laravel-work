@@ -1,0 +1,1 @@
+import{M as e}from"./Menu-o7H61YKs.js";import{d as a,c as o,w as t,u as s,a as r,o as n,b as _,I as c}from"./index-BH5ZGPoz.js";import{_ as m}from"./_plugin-vue_export-helper-DlAUqK2U.js";const p=a({__name:"HomePage",setup(u){return r(),(f,d)=>(n(),o(s(c),null,{default:t(()=>[_(e)]),_:1}))}}),g=m(p,[["__scopeId","data-v-5547821a"]]);export{g as default};
